@@ -1,0 +1,16 @@
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Never commit secrets or machine-local overrides
+.env
+*.local
+*.key
+*.pem
