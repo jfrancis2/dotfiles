@@ -1,0 +1,7 @@
+# Global gitignore: things that should never be committed from any repo.
+.env
+.env.*
+!.env.example
+*.swp
+*~
+.DS_Store

@@ -1,0 +1,50 @@
+# ~/.bashrc: managed by chezmoi. Edit the dotfiles repo, not this file.
+# Machine-specific or secret settings go in ~/.bashrc.local (not managed).
+
+# Non-interactive shells stop here.
+case $- in *i*) ;; *) return ;; esac
+
+# History: large, shared between tmux panes, timestamped.
+HISTCONTROL=ignoreboth:erasedups
+HISTSIZE=100000
+HISTFILESIZE=200000
+HISTTIMEFORMAT='%F %T  '
+shopt -s histappend checkwinsize globstar
+PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+
+# PATH
+for d in "$HOME/.local/bin" "$HOME/bin"; do
+    [[ -d $d && ":$PATH:" != *":$d:"* ]] && PATH="$d:$PATH"
+done
+export PATH
+export EDITOR=vim VISUAL=vim PAGER=less LESS=-FRX
+
+# Completion
+if ! shopt -oq posix && [[ -f /usr/share/bash-completion/bash_completion ]]; then
+    . /usr/share/bash-completion/bash_completion
+fi
+command -v uv >/dev/null && eval "$(uv generate-shell-completion bash)"
+
+# Prompt: user@host:dir (branch)$  (agent accounts are magenta, others green)
+if [[ -f /usr/lib/git-core/git-sh-prompt ]]; then
+    . /usr/lib/git-core/git-sh-prompt
+    GIT_PS1_SHOWDIRTYSTATE=1
+    GIT_PS1_SHOWUPSTREAM=auto
+fi
+__ps1_git() { declare -F __git_ps1 >/dev/null && __git_ps1 ' (%s)'; }
+PS1='\[\e[1;{{ if .agent }}35{{ else }}32{{ end }}m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0;33m\]$(__ps1_git)\[\e[0m\]\$ '
+
+# Aliases
+alias ls='ls --color=auto'
+alias ll='ls -alF'
+alias la='ls -A'
+alias grep='grep --color=auto'
+alias ..='cd ..'
+alias gs='git status -sb'
+alias gd='git diff'
+alias dc='docker compose'
+
+# t [name]: attach to tmux session <name> (default "main"), creating it if needed.
+t() { tmux new-session -A -s "${1:-main}"; }
+
+[[ -f ~/.bashrc.local ]] && . ~/.bashrc.local

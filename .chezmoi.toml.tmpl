@@ -1,0 +1,10 @@
+{{- /* Evaluated once by `chezmoi init`. cloud-init runs init with --promptDefaults, so the defaults below apply unattended. */ -}}
+{{- $name := promptStringOnce . "name" "Git author name" "Jamie Francis" -}}
+{{- $email := promptStringOnce . "email" "Git author email" "17693272+jfrancis2@users.noreply.github.com" -}}
+{{- /* Agent accounts are named agent, agent2, ... (see devbox). */ -}}
+{{- $agent := hasPrefix "agent" .chezmoi.username -}}
+
+[data]
+    name = {{ $name | quote }}
+    email = {{ $email | quote }}
+    agent = {{ $agent }}

@@ -1,0 +1,9 @@
+$include /etc/inputrc
+
+# Up/Down search history for lines starting with what is already typed.
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
+set completion-ignore-case on
+set show-all-if-ambiguous on
+set colored-stats on

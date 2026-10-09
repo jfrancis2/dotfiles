@@ -1,0 +1,36 @@
+[user]
+{{- if .agent }}
+	name = {{ .name }} (agent: {{ .chezmoi.username }})
+{{- else }}
+	name = {{ .name }}
+{{- end }}
+	email = {{ .email }}
+[init]
+	defaultBranch = main
+[core]
+	editor = vim
+	autocrlf = input
+	excludesFile = ~/.config/git/ignore
+[pull]
+	ff = only
+[push]
+	autoSetupRemote = true
+[fetch]
+	prune = true
+[rebase]
+	autoStash = true
+[merge]
+	conflictStyle = zdiff3
+[diff]
+	algorithm = histogram
+	colorMoved = default
+[rerere]
+	enabled = true
+[commit]
+	verbose = true
+[alias]
+	st = status -sb
+	co = checkout
+	sw = switch
+	lg = log --graph --oneline --decorate -20
+	amend = commit --amend --no-edit
