@@ -2,7 +2,10 @@
 {{- $name := promptStringOnce . "name" "Git author name" "Jamie Francis" -}}
 {{- $email := promptStringOnce . "email" "Git author email" "17693272+jfrancis2@users.noreply.github.com" -}}
 {{- /* Agent accounts are named agent, agent2, ... (see devbox). */ -}}
-{{- $agent := hasPrefix "agent" .chezmoi.username -}}
+{{- $agent := hasPrefix "agent" .chezmoi.username }}
+# Ubuntu gives interactive logins umask 002 but cloud-init runs with 022. Pin it so files
+# come out 0644 however chezmoi is run.
+umask = 0o022
 
 [data]
     name = {{ $name | quote }}
