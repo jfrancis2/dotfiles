@@ -47,6 +47,16 @@ Then open a new terminal and run the install command above. A few things to know
 - **Ghostty:** the config needs Ghostty 1.2 or later. Its shell integration only works with a current bash, which is one more reason to use the Homebrew one.
 - **VS Code:** the integrated terminal picks up your login shell. In it, `$EDITOR` is `code --wait`, so `git commit` and similar commands open in VS Code. This also applies over Remote-SSH to the devbox. Everywhere else, the editor is vim.
 
+### Dev containers
+
+VS Code Dev Containers (and Codespaces) can clone a dotfiles repo into every container they create and run its `install.sh`. To use this one, add to your VS Code user settings:
+
+```json
+"dotfiles.repository": "jfrancis2/dotfiles"
+```
+
+`install.sh` installs chezmoi if the image doesn't have it, then applies the clone with default answers, so it never prompts. Inside the container, `chezmoi update` works as usual.
+
 ## What's here
 
 | Source file | Becomes | Notes |
@@ -60,6 +70,7 @@ Then open a new terminal and run the install command above. A few things to know
 | `dot_tmux.conf` | `~/.tmux.conf` | Mouse on, 100k lines of scrollback, windows numbered from 1, splits that open in the current directory, activity flags. `C-b r` reloads it. |
 | `dot_inputrc` | `~/.inputrc` | Up/Down searches history for lines starting with what you've typed. |
 | `private_dot_config/ghostty/config` | `~/.config/ghostty/config` | macOS only. Installs Ghostty's terminfo on SSH hosts, and makes left Option act as Alt. |
+| `install.sh` | (not installed) | Entry point for dev containers; see above. |
 
 ### Agent accounts
 
