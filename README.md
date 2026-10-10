@@ -74,10 +74,12 @@ VS Code Dev Containers (and Codespaces) can clone a dotfiles repo into every con
 
 ### Agent accounts
 
-The devbox runs AI coding agents under their own Unix users, named `agent`, `agent2` and so on. If the username starts with `agent`, chezmoi sets `agent = true`, which changes two things:
+The devbox runs AI coding agents under their own Unix users, named `agent`, `agent2` and so on. If the username starts with `agent`, chezmoi sets `agent = true`, which changes these things:
 
 - The prompt is magenta instead of green, so you can tell which shell you're in.
 - Commits are authored as `Name (agent: <user>)`, so agent commits stand out in `git log`.
+- tmux's status bar is magenta with an `AGENT` badge.
+- `hints` (shown when `t` creates a session) lists the agent's limits and rules instead of how to reach the agent account.
 
 On any other username, nothing changes.
 
