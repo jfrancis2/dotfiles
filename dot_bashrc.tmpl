@@ -69,7 +69,8 @@ t() { tmux new-session -A -s "${1:-main}" -e DOTFILES_HINTS=1; }
 hints() {
     cat <<'EOF'
 tmux  C-b d  detach (t <name> to return)   C-b c  new window   C-b n / p  next / previous window
-      C-b " / %  split   C-b arrow  move   C-b [  scroll (q to stop)   C-b r  reload config
+      C-b %  split side by side   C-b "  split top/bottom   C-b arrow  move   C-b z  zoom pane
+      C-b [  scroll (q to stop)   C-b r  reload config   exit  close pane   tmux kill-session  end it
 EOF
 {{- if .agent }}
     cat <<EOF
