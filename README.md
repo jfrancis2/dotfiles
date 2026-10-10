@@ -56,10 +56,10 @@ Then open a new terminal and run the install command above. A few things to know
 | `dot_profile` | `~/.profile` | Login shell setup: loads Homebrew if it's installed, then sources `~/.bashrc`. |
 | `dot_bash_profile` | `~/.bash_profile` | Just sources `~/.profile`, so a stray `.bash_profile` can't stop it being read. |
 | `dot_gitconfig.tmpl` | `~/.gitconfig` | Fast-forward-only pulls, zdiff3 conflicts, rerere, histogram diffs, and a few aliases (`st`, `lg`, `amend`, ...). |
-| `dot_config/git/ignore` | `~/.config/git/ignore` | Global ignore list. It blocks `.env` files from every repo. |
+| `private_dot_config/git/ignore` | `~/.config/git/ignore` | The `private_` prefix keeps `~/.config` at 0700. Global ignore list. It blocks `.env` files from every repo. |
 | `dot_tmux.conf` | `~/.tmux.conf` | Mouse on, 100k lines of scrollback, windows numbered from 1, splits that open in the current directory, activity flags. `C-b r` reloads it. |
 | `dot_inputrc` | `~/.inputrc` | Up/Down searches history for lines starting with what you've typed. |
-| `dot_config/ghostty/config` | `~/.config/ghostty/config` | macOS only. Installs Ghostty's terminfo on SSH hosts, and makes left Option act as Alt. |
+| `private_dot_config/ghostty/config` | `~/.config/ghostty/config` | macOS only. Installs Ghostty's terminfo on SSH hosts, and makes left Option act as Alt. |
 
 ### Agent accounts
 
