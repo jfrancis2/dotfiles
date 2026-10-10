@@ -1,9 +1,19 @@
-# ~/.profile: managed by chezmoi. Login shells (SSH) read this, then ~/.bashrc.
+# ~/.profile: managed by chezmoi. Login shells (SSH, macOS terminals) read this, then ~/.bashrc.
 
-if [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ]; then
-    . "$HOME/.bashrc"
-fi
+# Homebrew (macOS): put brew's tools ahead of the older system ones.
+for brew in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+    if [ -x "$brew" ]; then
+        eval "$("$brew" shellenv)"
+        break
+    fi
+done
+unset brew
+export BASH_SILENCE_DEPRECATION_WARNING=1  # macOS nags about /bin/bash otherwise
 
 if [ -d "$HOME/.local/bin" ]; then
     case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) PATH="$HOME/.local/bin:$PATH" ;; esac
+fi
+
+if [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ]; then
+    . "$HOME/.bashrc"
 fi

@@ -9,33 +9,50 @@ HISTCONTROL=ignoreboth:erasedups
 HISTSIZE=100000
 HISTFILESIZE=200000
 HISTTIMEFORMAT='%F %T  '
-shopt -s histappend checkwinsize globstar
+shopt -s histappend checkwinsize
+shopt -s globstar 2>/dev/null  # bash 4+; macOS /bin/bash is 3.2
 PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
 
 # PATH
 for d in "$HOME/.local/bin" "$HOME/bin"; do
     [[ -d $d && ":$PATH:" != *":$d:"* ]] && PATH="$d:$PATH"
 done
+unset d
 export PATH
 export EDITOR=vim VISUAL=vim PAGER=less LESS=-FRX
+# In a VS Code terminal (local or Remote-SSH), git and friends open files in VS Code.
+if [[ $TERM_PROGRAM == vscode ]] && command -v code >/dev/null; then
+    export EDITOR='code --wait' VISUAL='code --wait'
+fi
 
-# Completion
-if ! shopt -oq posix && [[ -f /usr/share/bash-completion/bash_completion ]]; then
-    . /usr/share/bash-completion/bash_completion
+# Completion: Debian/Ubuntu path first, then Homebrew's bash-completion@2.
+if ! shopt -oq posix; then
+    for f in /usr/share/bash-completion/bash_completion \
+             "${HOMEBREW_PREFIX:-/nonexistent}/etc/profile.d/bash_completion.sh"; do
+        [[ -f $f ]] && { . "$f"; break; }
+    done
 fi
 command -v uv >/dev/null && eval "$(uv generate-shell-completion bash)"
 
 # Prompt: user@host:dir (branch)$  (agent accounts are magenta, others green)
-if [[ -f /usr/lib/git-core/git-sh-prompt ]]; then
-    . /usr/lib/git-core/git-sh-prompt
-    GIT_PS1_SHOWDIRTYSTATE=1
-    GIT_PS1_SHOWUPSTREAM=auto
-fi
+# git-sh-prompt lives in different places on Debian/Ubuntu, Homebrew git and Apple's git.
+for f in /usr/lib/git-core/git-sh-prompt \
+         "${HOMEBREW_PREFIX:-/nonexistent}/etc/bash_completion.d/git-prompt.sh" \
+         /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh; do
+    if [[ -f $f ]]; then
+        . "$f"
+        GIT_PS1_SHOWDIRTYSTATE=1
+        GIT_PS1_SHOWUPSTREAM=auto
+        break
+    fi
+done
+unset f
 __ps1_git() { declare -F __git_ps1 >/dev/null && __git_ps1 ' (%s)'; }
 PS1='\[\e[1;{{ if .agent }}35{{ else }}32{{ end }}m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0;33m\]$(__ps1_git)\[\e[0m\]\$ '
 
 # Aliases
-alias ls='ls --color=auto'
+# GNU ls takes --color; older BSD ls (macOS) uses -G.
+if ls --color=auto -d . >/dev/null 2>&1; then alias ls='ls --color=auto'; else alias ls='ls -G'; fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias grep='grep --color=auto'

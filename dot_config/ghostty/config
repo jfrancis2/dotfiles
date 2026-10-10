@@ -1,0 +1,10 @@
+# Ghostty config: managed by chezmoi, deployed on macOS only.
+# Docs: https://ghostty.org/docs/config
+
+# Over SSH, install Ghostty's terminfo on the remote host (e.g. devbox) the first time,
+# and fall back to TERM=xterm-256color if that isn't possible. Otherwise tmux, vim and
+# less on Linux hosts complain about the unknown terminal "xterm-ghostty".
+shell-integration-features = ssh-terminfo,ssh-env
+
+# Let the left Option key act as Alt, so readline (Alt-b/Alt-f) and tmux bindings work.
+macos-option-as-alt = left

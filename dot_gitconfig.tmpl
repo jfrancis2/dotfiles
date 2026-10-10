@@ -8,7 +8,6 @@
 [init]
 	defaultBranch = main
 [core]
-	editor = vim
 	autocrlf = input
 	excludesFile = ~/.config/git/ignore
 [pull]
@@ -34,3 +33,10 @@
 	sw = switch
 	lg = log --graph --oneline --decorate -20
 	amend = commit --amend --no-edit
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+# Machine-specific settings (signing key, work email, credential helper). Not managed.
+[include]
+	path = ~/.gitconfig.local
