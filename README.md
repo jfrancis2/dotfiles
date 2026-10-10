@@ -62,12 +62,12 @@ VS Code Dev Containers (and Codespaces) can clone a dotfiles repo into every con
 | Source file | Becomes | Notes |
 |---|---|---|
 | `.chezmoi.toml.tmpl` | chezmoi config | Holds the git name and email, plus the `agent` flag (see below). |
-| `dot_bashrc.tmpl` | `~/.bashrc` | Large shared history, PATH, completion, a git-aware prompt, aliases, and `t [name]` to attach to or create a tmux session. |
+| `dot_bashrc.tmpl` | `~/.bashrc` | Large shared history, PATH, completion, a git-aware prompt, aliases, `t [name]` to attach to or create a tmux session, and `hints`, a cheat sheet shown once in each new session. |
 | `dot_profile` | `~/.profile` | Login shell setup: loads Homebrew if it's installed, then sources `~/.bashrc`. |
 | `dot_bash_profile` | `~/.bash_profile` | Just sources `~/.profile`, so a stray `.bash_profile` can't stop it being read. |
 | `dot_gitconfig.tmpl` | `~/.gitconfig` | Fast-forward-only pulls, zdiff3 conflicts, rerere, histogram diffs, and a few aliases (`st`, `lg`, `amend`, ...). |
 | `private_dot_config/git/ignore` | `~/.config/git/ignore` | Global ignore list. It blocks `.env` files from every repo. The `private_` prefix keeps `~/.config` at 0700. |
-| `dot_tmux.conf` | `~/.tmux.conf` | Mouse on, 100k lines of scrollback, windows numbered from 1, splits that open in the current directory, activity flags. `C-b r` reloads it. |
+| `dot_tmux.conf.tmpl` | `~/.tmux.conf` | Mouse on, 100k lines of scrollback, windows numbered from 1, splits that open in the current directory, activity flags. `C-b r` reloads it. Agent accounts get a magenta status bar with an `AGENT` badge. |
 | `dot_inputrc` | `~/.inputrc` | Up/Down searches history for lines starting with what you've typed. |
 | `private_dot_config/ghostty/config` | `~/.config/ghostty/config` | macOS only. Installs Ghostty's terminfo on SSH hosts, and makes left Option act as Alt. |
 | `install.sh` | (not installed) | Entry point for dev containers; see above. |

@@ -62,6 +62,35 @@ alias gd='git diff'
 alias dc='docker compose'
 
 # t [name]: attach to tmux session <name> (default "main"), creating it if needed.
-t() { tmux new-session -A -s "${1:-main}"; }
+# A new session's first shell shows `hints` (DOTFILES_HINTS is only set on creation).
+t() { tmux new-session -A -s "${1:-main}" -e DOTFILES_HINTS=1; }
+
+# hints: cheat sheet for tmux and, on the devbox, for agents.
+hints() {
+    cat <<'EOF'
+tmux  C-b d  detach (t <name> to return)   C-b c  new window   C-b n / p  next / previous window
+      C-b " / %  split   C-b arrow  move   C-b [  scroll (q to stop)   C-b r  reload config
+EOF
+{{- if .agent }}
+    cat <<EOF
+You are the agent account "$USER": no sudo, no LAN access, your own GitHub token.
+  Repos live in ~/repos, on the root disk: push your branch before a rebuild.
+  Start work: cd ~/repos/<repo>, then your agent CLI (e.g. claude).
+  Work on a branch and open a PR; never push to main.
+EOF
+{{- else }}
+    if getent passwd agent >/dev/null 2>&1; then
+        echo "Agents: sudo -iu agent, then t <repo> to start or check on one."
+    fi
+{{- end }}
+    echo "Show this again: hints"
+}
 
 [[ -f ~/.bashrc.local ]] && . ~/.bashrc.local
+
+# First shell of a session created by t: show hints once, then drop the flag so later windows don't.
+if [[ -n ${DOTFILES_HINTS:-} ]]; then
+    unset DOTFILES_HINTS
+    tmux set-environment -u DOTFILES_HINTS 2>/dev/null
+    hints
+fi

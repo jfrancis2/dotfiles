@@ -32,3 +32,9 @@ set -g status-interval 5
 set -g status-left-length 30
 set -g status-left "#[bold][#S] "
 set -g status-right "#{?client_prefix,#[reverse] PREFIX #[noreverse] ,}#(whoami)@#H %H:%M"
+{{- if .agent }}
+
+# Agent accounts: magenta status bar with an AGENT badge, matching the magenta prompt.
+set -g status-style "bg=magenta,fg=black"
+set -g status-left "#[bold][#S] AGENT "
+{{- end }}
