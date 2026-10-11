@@ -70,6 +70,8 @@ VS Code Dev Containers (and Codespaces) can clone a dotfiles repo into every con
 | `dot_tmux.conf.tmpl` | `~/.tmux.conf` | Mouse on, 100k lines of scrollback, windows numbered from 1, splits that open in the current directory, activity flags. `C-b r` reloads it. Agent accounts get a magenta status bar with an `AGENT` badge. |
 | `dot_inputrc` | `~/.inputrc` | Up/Down searches history for lines starting with what you've typed. |
 | `private_dot_config/ghostty/config` | `~/.config/ghostty/config` | macOS only. Installs Ghostty's terminfo on SSH hosts, and makes left Option act as Alt. |
+| `.chezmoiscripts/run_onchange_install-gh.sh.tmpl` | (runs once per version) | Linux only. Installs a pinned [GitHub CLI](https://cli.github.com/) release into `~/.local/opt/gh/<version>`, without root, after checking it against the release's checksums. Change `version=` to upgrade. On macOS, use `brew install gh`. |
+| `dot_local/bin/executable_gh.tmpl` | `~/.local/bin/gh` | Linux only. Runs that `gh`. On agent accounts it takes the token from git's credential store, so `gh` works without `gh auth login` and the token isn't stored twice. Elsewhere, sign in with `gh auth login` as usual. |
 | `install.sh` | (not installed) | Entry point for dev containers; see above. |
 
 ### Agent accounts
@@ -78,6 +80,7 @@ The devbox runs AI coding agents under their own Unix users, named `agent`, `age
 
 - The prompt is magenta instead of green, so you can tell which shell you're in.
 - Commits are authored as `Name (agent: <user>)`, so agent commits stand out in `git log`.
+- `gh` uses the account's git token (see `~/.local/bin/gh` above), so agents can open pull requests.
 - tmux's status bar is magenta with an `AGENT` badge.
 - `hints` (shown when `t` creates a session) lists the agent's limits and rules instead of how to reach the agent account.
 
