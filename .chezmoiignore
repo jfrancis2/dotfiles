@@ -4,3 +4,6 @@ LICENSE
 {{- if ne .chezmoi.os "darwin" }}
 .config/ghostty
 {{- end }}
+{{- if ne .chezmoi.os "linux" }}
+.local/bin/gh
+{{- end }}

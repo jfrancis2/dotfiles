@@ -1,0 +1,16 @@
+#!/bin/sh
+# Runs the GitHub CLI installed by .chezmoiscripts/run_onchange_install-gh.sh.
+{{- if .agent }}
+# Agent accounts: use the token git already has, so it isn't stored a second time
+# (gh auth login would copy it into ~/.config/gh). Rotating it in one place covers both.
+# Credentials may be per repository (credential.useHttpPath), so ask for the one that
+# belongs to this repo's origin when there is one.
+if [ -z "${GH_TOKEN:-}${GITHUB_TOKEN:-}" ]; then
+    repo=$(git remote get-url origin 2>/dev/null | sed -n 's#^https://github\.com/##p')
+    GH_TOKEN=$(printf 'protocol=https\nhost=github.com\n%s\n\n' "${repo:+path=$repo}" |
+        GIT_TERMINAL_PROMPT=0 git -c credential.interactive=false credential fill 2>/dev/null |
+        sed -n 's/^password=//p')
+    if [ -n "$GH_TOKEN" ]; then export GH_TOKEN; else unset GH_TOKEN; fi
+fi
+{{- end }}
+exec "$HOME/.local/opt/gh/current/bin/gh" "$@"
